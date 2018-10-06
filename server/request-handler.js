@@ -19,18 +19,18 @@ var actions = {
   },
   
   'POST': function (request, response) {
-    utilities.sendResponse(response, {results : []},200)
+    utilities.sendResponse(response, data,201)
   }
 }
 
 
 
-module.exports = function (request, response) {
+exports.handleRequest = function (request, response) {
   var action = actions[request.method];
   if(action) {
     action(request, response)
   } else {
-    utilties.sendResponse(response, 'Not Found', 404)
+    utilities.sendResponse(response, 'Not Found', 404)
   }
 }
 

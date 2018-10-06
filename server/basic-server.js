@@ -17,7 +17,8 @@ var port = 3000;
 var ip = '127.0.0.1';
 
 var routes = {
-  '/classes/messages': handleRequest
+  '/classes/messages': handleRequest.handleRequest,
+  '/classes/messages?order=-createdAt': handleRequest.handleRequest,
 }
 
 // We use node's http module to create a server.
