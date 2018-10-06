@@ -19,13 +19,13 @@ var actions = {
   },
   
   'POST': function (request, response) {
-    utilities.sendResponse(response, data,201)
+    utilities.sendResponse(response, {results : []},201)
   }
 }
 
 
 
-exports.handleRequest = function (request, response) {
+exports.requestHandler = function (request, response) {
   var action = actions[request.method];
   if(action) {
     action(request, response)
