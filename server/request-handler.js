@@ -12,13 +12,16 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/ 
 var utilities = require('./utilities.js')
+var querystring = require('querystring')
+var messages = [];
 
 var actions = {
   'GET': function (request, response) {
-    utilities.sendResponse(response, {results : []},200)
+    utilities.sendResponse(response, {results : messages},200)
   },
   
   'POST': function (request, response) {
+    messages.push(response)
     utilities.sendResponse(response, {results : []},201)
   }
 }
@@ -26,12 +29,35 @@ var actions = {
 
 
 exports.requestHandler = function (request, response) {
-  var action = actions[request.method];
-  if(action) {
-    action(request, response)
-  } else {
+  
+  if(request.method === 'POST'){
+    let body = '';
+    request.on('data', chunk => {
+      body+= chunk.toString();
+    })
+    request.on('end', () => {
+      console.log(body)
+      let test = querystring.parse(body)
+      messages.push(test)
+      response.end('ok')
+    })
+  } else if (request.method === 'GET') {
+    var action = actions[request.method];
+      if(action) {
+        action(request, response)
+      }
+    } else {
     utilities.sendResponse(response, 'Not Found', 404)
   }
+  
+  
+  
+  // var action = actions[request.method];
+  // if(action) {
+  //   action(request, response)
+  // } else {
+  //   utilities.sendResponse(response, 'Not Found', 404)
+  // }
 }
 
 // var requestHandler = function(request, response) {
